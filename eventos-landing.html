@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EventOS — Something is being planned</title>
+<meta name="description" content="A new venture at the intersection of AI and events. Launching soon." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,500;1,9..144,340&family=Manrope:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:      #0F0A1E;   /* deep midnight aubergine */
+    --twilight: #1C1236;   /* section depth */
+    --gold:     #E8B44A;   /* marigold / string-light gold */
+    --gold-dim: #B98A2E;
+    --ivory:    #F4EDDE;   /* candle-lit text */
+    --muted:    #9A8DB8;   /* dusk lavender for secondary text */
+    --hairline: rgba(232,180,74,0.22);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html,body{ height:100%; }
+
+  body{
+    background: radial-gradient(120% 90% at 50% 110%, var(--twilight) 0%, var(--ink) 62%);
+    color: var(--ivory);
+    font-family:'Manrope', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x:hidden;
+  }
+
+  /* ---------- lights canvas ---------- */
+  #lights{
+    position:fixed; inset:0;
+    width:100%; height:100%;
+    z-index:0;
+    pointer-events:none;
+  }
+
+  /* ---------- layout ---------- */
+  .page{
+    position:relative; z-index:1;
+    min-height:100vh; min-height:100svh;
+    display:flex; flex-direction:column;
+    padding: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    animation: rise 1s ease both;
+  }
+
+  .wordmark{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.85rem; letter-spacing:0.28em;
+    color:var(--ivory);
+    text-transform:uppercase;
+  }
+  .wordmark b{ color:var(--gold); font-weight:500; }
+
+  .status{
+    display:flex; align-items:center; gap:0.5rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--muted);
+  }
+  .status .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:var(--gold);
+    box-shadow:0 0 10px 2px rgba(232,180,74,0.55);
+    animation:pulse 2.4s ease-in-out infinite;
+  }
+
+  main{
+    flex:1;
+    display:flex; flex-direction:column;
+    justify-content:center;
+    max-width:60rem;
+    margin:0 auto;
+    text-align:center;
+    padding:4rem 0;
+  }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem; letter-spacing:0.34em; text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:1.75rem;
+    animation: rise 1s ease 0.15s both;
+  }
+
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:340;
+    font-size: clamp(2.6rem, 7vw, 5.4rem);
+    line-height:1.06;
+    letter-spacing:-0.015em;
+    text-wrap:balance;
+    animation: rise 1s ease 0.3s both;
+  }
+  h1 em{
+    font-style:italic;
+    font-weight:340;
+    color:var(--gold);
+  }
+
+  .sub{
+    margin:2rem auto 0;
+    max-width:34rem;
+    font-size:clamp(1rem, 1.6vw, 1.15rem);
+    line-height:1.7;
+    color:var(--muted);
+    animation: rise 1s ease 0.45s both;
+  }
+
+  .cta-row{
+    margin-top:3rem;
+    display:flex; gap:1rem; justify-content:center; align-items:center; flex-wrap:wrap;
+    animation: rise 1s ease 0.6s both;
+  }
+
+  .cta{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.8rem; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--ink);
+    background:var(--gold);
+    padding:0.95rem 1.9rem;
+    border-radius:999px;
+    text-decoration:none;
+    transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+    box-shadow:0 0 0 0 rgba(232,180,74,0);
+  }
+  .cta:hover{ transform:translateY(-2px); box-shadow:0 8px 30px rgba(232,180,74,0.35); background:#F2C463; }
+  .cta:focus-visible{ outline:2px solid var(--ivory); outline-offset:3px; }
+
+  .whisper{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem; letter-spacing:0.14em;
+    color:var(--muted); opacity:0.75;
+  }
+
+  footer{
+    display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--muted);
+    border-top:1px solid var(--hairline);
+    padding-top:1.25rem;
+    animation: rise 1s ease 0.75s both;
+  }
+
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(18px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:0.5; transform:scale(0.8); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    #lights{ display:none; }
+  }
+
+  @media (max-width:560px){
+    .status span:last-child{ display:none; }
+    main{ padding:3rem 0; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="lights" aria-hidden="true"></canvas>
+
+<div class="page">
+  <header>
+    <div class="wordmark">Event<b>OS</b></div>
+    <div class="status"><span class="dot"></span><span>In the works · 2026</span></div>
+  </header>
+
+  <main>
+    <div class="eyebrow">Quietly building</div>
+    <h1>Something wonderful<br/>is being <em>planned.</em></h1>
+    <p class="sub">
+      A new venture at the intersection of AI and events.
+      That's all we can say for now — but if you've ever run one,
+      you'll understand why we're building it.
+    </p>
+    <div class="cta-row">
+      <a class="cta" href="mailto:hello@eventos.in?subject=Keep%20me%20posted">Be first to know</a>
+      <span class="whisper">no spam · just the reveal</span>
+    </div>
+  </main>
+
+  <footer>
+    <span>Bengaluru, India</span>
+    <span>AI × Events</span>
+    <span>© 2026 EventOS</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+
+  const c = document.getElementById('lights');
+  const ctx = c.getContext('2d');
+  let w, h, dpr;
+  const N = 46;
+  const pts = [];
+
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth; h = window.innerHeight;
+    c.width = w * dpr; c.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (let i = 0; i < N; i++){
+    pts.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: 0.8 + Math.random() * 1.8,
+      vx: (Math.random() - 0.5) * 0.18,
+      vy: (Math.random() - 0.5) * 0.14,
+      tw: Math.random() * Math.PI * 2,        // twinkle phase
+      ts: 0.008 + Math.random() * 0.02        // twinkle speed
+    });
+  }
+
+  const LINK = 130; // px — lights briefly "find each other"
+
+  function frame(){
+    ctx.clearRect(0, 0, w, h);
+
+    // faint constellations — the quiet suggestion of orchestration
+    for (let i = 0; i < N; i++){
+      for (let j = i + 1; j < N; j++){
+        const a = pts[i], b = pts[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const d = Math.hypot(dx, dy);
+        if (d < LINK){
+          const alpha = (1 - d / LINK) * 0.10;
+          ctx.strokeStyle = 'rgba(232,180,74,' + alpha.toFixed(3) + ')';
+          ctx.lineWidth = 0.6;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // the lights themselves
+    for (const p of pts){
+      p.x += p.vx; p.y += p.vy; p.tw += p.ts;
+      if (p.x < -20) p.x = w + 20; if (p.x > w + 20) p.x = -20;
+      if (p.y < -20) p.y = h + 20; if (p.y > h + 20) p.y = -20;
+
+      const glow = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(p.tw));
+      const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 6);
+      g.addColorStop(0, 'rgba(232,180,74,' + (0.85 * glow).toFixed(3) + ')');
+      g.addColorStop(0.4, 'rgba(232,180,74,' + (0.25 * glow).toFixed(3) + ')');
+      g.addColorStop(1, 'rgba(232,180,74,0)');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * 6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+
+</body>
+</html>
